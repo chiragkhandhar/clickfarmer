@@ -1,22 +1,28 @@
-window.addEventListener('load', function () {
-    updateClickLabels();
-})
+window.addEventListener("load", function () {
+  updateClickLabels();
+});
 
 function colorClicked(color) {
-    console.log("color clicked", color);
-    // hmm
+  const requestOptions = {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  fetch(`/api/clicks/${color}`, requestOptions).then(() => {
+    fetch(`/api/clicks/${color}`)
+      .then((response) => response.json())
+      .then((count) => {
+        document.getElementById(`color-label-${color}`).innerHTML = `${color}: ${count}`;
+      });
+  });
 }
 
 function updateClickLabels() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var response = JSON.parse(this.responseText);
-            document.getElementById("color-label-red").innerHTML = "red: " + response.redClicks
-            document.getElementById("color-label-green").innerHTML = "red: " + response.greenClicks
-            document.getElementById("color-label-blue").innerHTML = "red: " + response.blueClicks
-        }
-    };
-    xhttp.open("GET", "/api/clicks", true);
-    xhttp.send();
+  fetch("/api/clicks")
+    .then((response) => response.json())
+    .then((count) => {
+      document.getElementById("color-label-red").innerHTML = `red: ${count.redClicks}`;
+      document.getElementById("color-label-green").innerHTML = `green: ${count.greenClicks}`;
+      document.getElementById("color-label-blue").innerHTML = `blue: ${count.blueClicks}`;
+    });
 }

@@ -55,6 +55,7 @@ func (a *APIServer) clickColorHandler(ctx context.Context, w http.ResponseWriter
 		case "blue":
 			a.cache.values.Blue++
 		}
+
 		return
 
 	default:
